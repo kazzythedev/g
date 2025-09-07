@@ -1,1 +1,80 @@
-404: Not Found
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>project central</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header>
+  <div class="logo">project central</div>
+  <nav>
+  <div class="ad-slot">
+    <script type="text/javascript">
+      atOptions = {
+        'key': 'b185e1bde55f3ff0881f77af6b63bfb3',
+        'format': 'iframe',
+        'height': 60,
+        'width': 468,
+        'params': {}
+      };
+    </script>
+    <script type="text/javascript" src="//conveyedorchidframes.com/b185e1bde55f3ff0881f77af6b63bfb3/invoke.js"></script>
+  </div>
+
+    <input id="search" class="search-bar" type="text" placeholder="Search games...">
+</nav>
+</header>
+
+  <main>
+    <div id="loader">Loading games...</div>
+    <div id="game-container" class="grid"></div>
+  </main>
+
+  <script>
+    const coverBase = "https://cdn.jsdelivr.net/gh/gn-math/covers@main";
+    const htmlBase  = "https://cdn.jsdelivr.net/gh/gn-math/html@main";
+
+    async function loadGames() {
+      const res = await fetch("cdn-games.json");
+      const games = await res.json();
+
+      const container = document.getElementById("game-container");
+      const loader = document.getElementById("loader");
+      const search = document.getElementById("search");
+
+      loader.style.display = "none";
+      container.innerHTML = "";
+
+      function render(filter="") {
+        container.innerHTML = "";
+        games
+          .filter(g => g.name.toLowerCase().includes(filter.toLowerCase()))
+          .forEach(game => {
+            const cover = game.cover.replace("{COVER_URL}", coverBase);
+            const url   = game.url.replace("{HTML_URL}", htmlBase);
+
+            const card = document.createElement("div");
+            card.className = "game-card";
+            card.innerHTML = `
+              <img src="${cover}" alt="${game.name}">
+              <h3>${game.name}</h3>
+              <p>${game.author || ""}</p>
+            `;
+            card.onclick = () => {
+              window.location.href = "viewer.html?url=" + encodeURIComponent(url);
+            };
+            container.appendChild(card);
+          });
+      }
+
+      search.addEventListener("input", e => render(e.target.value));
+      render();
+    }
+
+    loadGames();
+  </script>
+<script type='text/javascript' src='//conveyedorchidframes.com/b8/d5/22/b8d522574ca00580018a21d1a56b356c.js'></script>
+</body>
+</html>

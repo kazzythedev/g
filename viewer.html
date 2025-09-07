@@ -1,1 +1,96 @@
-404: Not Found
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>play - project central</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    body {margin:0; background:#0f172a;}
+    header {
+      display:flex;
+      align-items:center;
+      gap:12px;
+      padding:10px 16px;
+      background:#1e293b;
+      color:#fff;
+    }
+    header button {
+      background:#334155;
+      border:none;
+      padding:6px 12px;
+      border-radius:6px;
+      color:#fff;
+      cursor:pointer;
+    }
+    header button:hover {background:#475569;}
+    #game-frame {
+      position:absolute;
+      top:50px;
+      left:0;
+      width:100%;
+      height:calc(100vh - 50px);
+      border:none;
+    }
+    #loader {
+      position:absolute;
+      top:50%;
+      left:50%;
+      transform:translate(-50%,-50%);
+      color:#94a3b8;
+    }
+  .ad-slot {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  width: 468px;
+  height: 60px;  
+  margin-left: auto; 
+}
+
+  </style>
+</head>
+<body>
+  <header id="header">
+    <button onclick="history.back()">← Back</button>
+    <div class="ad-slot">
+    <script type="text/javascript">
+      atOptions = {
+        'key': 'b185e1bde55f3ff0881f77af6b63bfb3',
+        'format': 'iframe',
+        'height': 60,
+        'width': 468,
+        'params': {}
+      };
+    </script>
+    <script type="text/javascript" src="//conveyedorchidframes.com/b185e1bde55f3ff0881f77af6b63bfb3/invoke.js"></script>
+  </div>
+    <span id="loader">loading...</span>
+  </header>
+  <iframe id="game-frame"></iframe>
+
+  <script>
+    const frame = document.getElementById("game-frame");
+    const loader = document.getElementById("loader");
+
+    const u = new URLSearchParams(location.search).get("url");
+    if (u) {
+      fetch(u)
+        .then(res => res.text())
+        .then(html => {
+          const doc = frame.contentWindow.document;
+          doc.open();
+          doc.write(html);
+          doc.close();
+          loader.style.display = "none";
+        })
+        .catch(err => {
+          loader.textContent = "failed to load game: " + err;
+        });
+    } else {
+      loader.textContent = "no game selected";
+    }
+  </script>
+<script type='text/javascript' src='//conveyedorchidframes.com/b8/d5/22/b8d522574ca00580018a21d1a56b356c.js'></script>
+</body>
+</html>
