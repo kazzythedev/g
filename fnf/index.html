@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Friday Night Funkin'</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <link rel="shortcut icon" type="image/png" href="https://cdn.jsdelivr.net/gh/genizy/fridayfunk/favicon.png">
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/gh/genizy/fridayfunk/Funkin.js"></script>
+
+  <!-- FNF-style font -->
+  <link href="https://fonts.googleapis.com/css2?family=Luckiest+Guy&display=swap" rel="stylesheet">
+
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      overflow: hidden;
+      background: #000;
+      font-family: 'Luckiest Guy', cursive;
+      color: white;
+    }
+
+    #openfl-content {
+      width: 100%;
+      height: 100%;
+      background: #000;
+    }
+
+    .overlay {
+      position: fixed;
+      inset: 0;
+      background: #000;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+      transition: opacity 1s ease;
+      text-align: center;
+    }
+    .overlay.hidden {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .press {
+      font-size: 28px;
+      cursor: pointer;
+      animation: pulse 1200ms infinite ease-in-out;
+      text-shadow: 2px 2px 0px #000;
+    }
+    @keyframes pulse {
+      0% { opacity: 1; transform: scale(1); }
+      50% { opacity: .5; transform: scale(1.1); }
+      100% { opacity: 1; transform: scale(1); }
+    }
+
+    .loading-sequence {
+      position: fixed;
+      inset: 0;
+      background: #000;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      font-size: 36px;
+      line-height: 1.4;
+      opacity: 0;
+      z-index: 10000;
+      transition: opacity 0.5s ease;
+    }
+    .loading-sequence.show {
+      opacity: 1;
+    }
+    .loading-line {
+      opacity: 0;
+      transition: opacity 0.2s ease;
+    }
+    .loading-line.show {
+      opacity: 1;
+    }
+  </style>
+</head>
+<body>
+  <div class="overlay" id="overlay">
+    <div class="press" id="press">PRESS ENTER (music warning)</div>
+  </div>
+
+  <div class="loading-sequence" id="loading">
+    <div class="loading-line" id="line1">FRIDAY</div>
+    <div class="loading-line" id="line2">NIGHT</div>
+    <div class="loading-line" id="line3">FUNKIN</div>
+    <div class="loading-line" id="line4">NOT AFFILIATED WITH NEWGROUNDS</div>
+    <div class="loading-line" id="line5">PORT BY KAZZY</div>
+    <div class="loading-line" id="line6">request by qatual/dvzn/solo/the solo central guy</div>
+    <div class="loading-line" id="line7">origanaly on    project-central.github.io</div>
+    <div class="loading-line" id="line8">https://discord.gg/dYRDqJ9R</div>
+  </div>
+
+  <div id="openfl-content"></div>
+
+  <audio id="music" src="gettin-freaky.mp3"></audio>
+
+  <script type="text/javascript">
+    lime.embed("Funkin", "openfl-content", 1280, 720, { parameters: {} });
+
+    const overlay = document.getElementById('overlay');
+    const press = document.getElementById('press');
+    const loading = document.getElementById('loading');
+    const music = document.getElementById('music');
+
+    const lines = [
+      document.getElementById('line1'),
+      document.getElementById('line2'),
+      document.getElementById('line3'),
+      document.getElementById('line4'),
+      document.getElementById('line5'),
+      document.getElementById('line6'),
+      document.getElementById('line7'),
+      document.getElementById('line8')
+    ];
+
+    function start() {
+      overlay.classList.add('hidden');
+      setTimeout(() => overlay.remove(), 1000);
+
+      setTimeout(() => {
+        loading.classList.add('show');
+        music.volume = 1;
+        music.play();
+
+        let delay = 0;
+        lines.forEach((line, i) => {
+          setTimeout(() => line.classList.add('show'), delay);
+          delay += 1500;
+        });
+
+        setTimeout(() => {
+          let fadeOut = setInterval(() => {
+            if (music.volume > 0.05) {
+              music.volume -= 0.05;
+            } else {
+              music.pause();
+              music.currentTime = 0;
+              clearInterval(fadeOut);
+            }
+          }, 100);
+
+          loading.classList.remove('show');
+          setTimeout(() => loading.remove(), 800);
+        }, delay + 1500);
+
+      }, 1000);
+    }
+
+    press.addEventListener('click', start);
+    window.addEventListener('keydown', e => {
+      if (e.key === 'Enter') start();
+    });
+  </script>
+</body>
+</html>
